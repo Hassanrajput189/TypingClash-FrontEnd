@@ -103,7 +103,8 @@ const TypingInterface = () => {
     setCPM(0);
     setWPM(0);
 
-    if(isMultiplayer && players.length >=2){
+    if(isMultiplayer && players.length >= 2){
+      console.log(players.length);
       setGameStarted(true);
     }
 
