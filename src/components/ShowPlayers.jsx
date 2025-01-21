@@ -1,4 +1,13 @@
-const ShowPlayers = ({players}) => {
+import context from "../context/context";
+import { useContext } from "react";
+
+const {setRoomComplete} = useContext(context);
+const ShowPlayers = ({players}) => { 
+  {
+    if(players.length >=2){
+      setRoomComplete(true);
+    }
+  }
   return (
     <div>
       <p className="text-lg font-medium mb-4">Players in Room:</p>

@@ -13,7 +13,7 @@ const TypingInterface = () => {
   const inputRef = useRef(null);
   const charRef = useRef([]);
   const [correctWrong, setCorrectWrong] = useState([]);
-  const { socket, currentText,setGameStarted,isMultiplayer,players } = useContext(context);
+  const { socket, currentText,setGameStarted,isMultiplayer,roomComplete } = useContext(context);
 
   useEffect(() => {
     setCorrectWrong(Array(currentText.length).fill(''));
@@ -103,8 +103,7 @@ const TypingInterface = () => {
     setCPM(0);
     setWPM(0);
 
-    if(isMultiplayer && players.length >= 2){
-      console.log(players.length);
+    if(isMultiplayer && roomComplete){
       setGameStarted(true);
     }
 
