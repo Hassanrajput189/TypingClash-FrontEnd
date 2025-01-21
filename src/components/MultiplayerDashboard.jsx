@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import ShowPlayers from "./ShowPlayers";
 import context from "../context/context";
 import toast from "react-hot-toast";
@@ -39,7 +39,6 @@ const MultiplayerInterface = () => {
 
   return (
     <div className="h-[70vh]  rounded-l-2xl bg-[#a8dfee] border-4 border-[#268da9]">
-
       <div className="font-bold my-4 ml-2">Your ID: {socket.id}</div>
       {!gameStarted && (
         <form onSubmit={handleJoinRoom}>
