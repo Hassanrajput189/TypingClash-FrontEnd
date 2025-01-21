@@ -1,9 +1,10 @@
 import context from "../context/context";
 import { useContext } from "react";
 
-const {setRoomComplete} = useContext(context);
 const ShowPlayers = ({players}) => { 
+  const {setRoomComplete} = useContext(context);
   {
+
     if(players.length >=2){
       setRoomComplete(true);
     }
