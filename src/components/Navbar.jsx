@@ -56,9 +56,9 @@ const Navbar = () => {
             Modes
           </div>
           {isModesOpen && (
-            <ul className="absolute flex-col gap-2 mt-1 list-none bg-[#fc8124] rounded-lg shadow-lg z-10 cursor-pointer border border-black">
+            <ul className="w-[105px] absolute flex-col gap-2 mt-1 list-none bg-[#fc8124] rounded-lg shadow-lg z-10 cursor-pointer border border-black">
               <li
-                className="hover:bg-[#ffad5c] px-4 py-2 pr-10 border-b border-black rounded transition-all duration-300 ease-in-out"
+                className="hover:bg-[#ffad5c] px-2 py-2 border-b border-black rounded transition-all duration-300 ease-in-out"
                 onClick={(e) => {
                   e.preventDefault();
                   setIsMultiplayer(false);
@@ -69,7 +69,7 @@ const Navbar = () => {
                 Singleplayer
               </li>
               <li
-                className="hover:bg-[#ffad5c] px-4 py-2 pr-10 border-b border-black rounded transition-all duration-300 ease-in-out"
+                className="hover:bg-[#ffad5c] px-2 py-2  border-b border-black rounded transition-all duration-300 ease-in-out"
                 onClick={(e) => {
                   e.preventDefault();
                   setIsMultiplayer(true);
@@ -91,9 +91,9 @@ const Navbar = () => {
             Levels
           </div>
           {isLevelsOpen && (
-            <ul className="absolute flex-col gap-2 mt-1 list-none bg-[#fc8124] rounded-lg shadow-lg z-10 cursor-pointer border border-black">
+            <ul className="w-[70px] absolute flex-col gap-2 mt-1 list-none bg-[#fc8124] rounded-lg shadow-lg z-10 cursor-pointer border border-black ml-1">
               <li
-                className="hover:bg-[#ffad5c] px-4 py-2 pr-10 border-b border-black rounded transition-all duration-300 ease-in-out"
+                className=" hover:bg-[#ffad5c] px-2 py-2  border-b border-black rounded transition-all duration-300 ease-in-out"
                 onClick={(e) => {
                   e.preventDefault();
                   setCurrentText(text1);
@@ -103,7 +103,7 @@ const Navbar = () => {
                 level 1
               </li>
               <li
-                className="hover:bg-[#ffad5c] px-4 py-2 pr-10 border-b border-black rounded transition-all duration-300 ease-in-out"
+                className="hover:bg-[#ffad5c] px-2 py-2  border-b border-black rounded transition-all duration-300 ease-in-out"
                 onClick={(e) => {
                   e.preventDefault();
                   setCurrentText(text2);
@@ -113,7 +113,7 @@ const Navbar = () => {
                 level 2
               </li>
               <li
-                className="hover:bg-[#ffad5c] px-4 py-2 pr-10 border-b border-black rounded transition-all duration-300 ease-in-out"
+                className="hover:bg-[#ffad5c] px-2 py-2  border-b border-black rounded transition-all duration-300 ease-in-out"
                 onClick={(e) => {
                   e.preventDefault();
                   setCurrentText(text3);
