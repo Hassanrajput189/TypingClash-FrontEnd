@@ -35,15 +35,14 @@ const MultiplayerInterface = () => {
   const handleJoinRoom = (e) => {
     e.preventDefault();
     socket.emit("joinRoom", room);
-    toast.success(`${socket.id} joined room ${room}`);    
+    toast.success(`${socket.id} joined room ${room}`);
   };
 
   return (
-    <div className="h-[70vh]  rounded-l-2xl bg-[#a8dfee] border-4 border-[#268da9]">
-      <div className="font-bold my-4 ml-2">Your ID: {socket.id}</div>
+    <div className="h-[70vh] w-[18vw] rounded-l-3xl bg-[#a8dfee] border-4 border-[#268da9]">
+      <div className="font-bold pt-4 pl-2">Your ID: {socket.id}</div>
       {!gameStarted && (
         <form onSubmit={handleJoinRoom}>
-          <p>Enter any room name and make others to join with the same room name</p>
           <div className="flex gap-4 mb-4">
             <div>
               <input
