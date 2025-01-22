@@ -10,7 +10,6 @@ const ContextProvidor = ({ children }) => {
   const [room, setRoom] = useState("");
   const [isLogedIn, setIsLogedIn] = useState(false);
   const [isMultiplayer, setIsMultiplayer] = useState(false);
-  const [roomComplete,setRoomComplete] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
   const [players, setPlayers] = useState([]);
 
