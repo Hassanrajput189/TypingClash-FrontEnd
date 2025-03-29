@@ -7,7 +7,7 @@ import context from "../context/context";
 import ShowPlayers from "./ShowPlayers";
 
 const Home = () => {
-  const { room, players, isMultiplayer,rankedPlayers } = useContext(context);
+  const { room, players, isMultiplayer, rankedPlayers } = useContext(context);
   const [showMultiFunc, setShowMultiFunc] = useState(false);
 
   useEffect(() => {
@@ -15,32 +15,31 @@ const Home = () => {
   }, [isMultiplayer]);
 
   return (
-    <div className="bg-[#eeeded]  flex flex-col items-center w-full gap-4 min-h-screen ">
+    <div className="bg-[#eeeded] flex flex-col items-center w-full gap-4 min-h-screen">
       <Navbar />
       <div className={`flex flex-col items-center w-full gap-4 flex-grow`}>
-        {/* Multiplayer Dashboard */}
+        {/* 1. Multiplayer Dashboard */}
         <div
           className={`transition-all duration-500 ease-in-out ${
             showMultiFunc
-              ? "translate-y-0 opacity-100 "
-              : "translate-y-[-100%] opacity-0  "
-          } `}
+              ? "translate-y-0 opacity-100"
+              : "translate-y-[-100%] opacity-0"
+          }`}
         >
           <MultiplayerInterface />
         </div>
 
-        {/* Typing Interface */}
-        <div className="block ">
+        {/* 2. Typing Interface */}
+        <div className="block">
           <TypingInterface />
         </div>
 
-        {/* Show Players (Only in multiplayer mode) */}
-        <div>
-          <div className="h-full max-h-[200px] overflow-y-auto w-full">
-            {/* Ensure ShowPlayers content is scrollable */}
-            {room && players  && <ShowPlayers players={rankedPlayers} />}
+        {/* 3. Show Players (Only in multiplayer mode when in a room) */}
+        {isMultiplayer && room && players.length > 0 && (
+          <div className="w-full max-w-[60vw]">
+            <ShowPlayers players={players} />
           </div>
-        </div>
+        )}
       </div>
       
       <div className="relative bottom-0 w-full">
