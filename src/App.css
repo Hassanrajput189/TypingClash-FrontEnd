@@ -4,10 +4,10 @@
 }
 
   .correct{
-    color: green;
+    color: #4caf50
   }
   
   .wrong{
-    background-color: pink;
-    color:darkred;
+    background-color: #ffcccb; 
+    color: #d32f2f; 
   }

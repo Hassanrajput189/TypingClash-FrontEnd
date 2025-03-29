@@ -1,44 +1,48 @@
-import { StrictMode, useContext } from "react";
+import { StrictMode, useContext, useEffect, useMemo, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
 import Login from "./components/Login.jsx";
-import { RouterProvider, Navigate } from "react-router-dom";
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
 import Register from "./components/Register.jsx";
 import { Toaster } from "react-hot-toast";
-import ContextProvider from "./context/ContextProvidor.jsx"
+import ContextProvider from "./context/ContextProvidor.jsx";
 import context from "./context/context.js";
 
 const Routes = () => {
-  const { isLogedIn } = useContext(context);
+  const { isLogedIn,isPC, setIsPC } = useContext(context);
+  const [width, setWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    setIsPC(width>=786);
+    },[isPC,width]);
 
   const router = createBrowserRouter([
     {
-      path: "/register", 
+      path: "/register",
       element: <Register />,
     },
     {
-      path: "/login", 
+      path: "/login",
       element: <Login />,
     },
     {
-      path: "/", 
+      path: "/",
       element: isLogedIn ? <App /> : <Navigate to="/login" replace />,
     },
   ]);
+
   return (
     <>
-     <StrictMode>
-      <RouterProvider router={router} />
-      <Toaster position="top-center" reverseOrder={false} />
-      </StrictMode>
+      {/* <StrictMode> */}
+        <RouterProvider router={router} />
+        <Toaster position="top-center" reverseOrder={false} />
+      {/* </StrictMode> */}
     </>
   );
 };
 
 createRoot(document.getElementById("root")).render(
-  
   <ContextProvider>
     <Routes />
   </ContextProvider>

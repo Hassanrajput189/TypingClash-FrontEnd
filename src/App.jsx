@@ -1,6 +1,6 @@
 import "./App.css";
 import Home from "./components/Home"
-import { useState, useEffect,useContext } from "react";
+import { useEffect,useContext } from "react";
 import toast from 'react-hot-toast'
 import context from "./context/context"
 import axios from "axios";
@@ -8,18 +8,8 @@ import axios from "axios";
 
 function App() {
 
-  const {socket, setText1, setText2,setText3,setCurrentText} = useContext(context);
-  const [socketId, setSocketId] = useState("");
+  const { setText1, setText2,setText3,setCurrentText} = useContext(context);
 
-  useEffect(() => {
-    socket.on("connect", () => {
-      setSocketId(socket.id.toString());
-    });
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
-  
   useEffect(() => {
     const fetchData = async () => {
 
@@ -50,7 +40,7 @@ function App() {
   },[]); 
 
   return (
-    <div >
+    <div className="h-screen w-screen">
       <Home/>
     </div>
   );
