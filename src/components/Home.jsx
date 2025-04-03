@@ -1,13 +1,13 @@
 import { useContext, useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import TypingInterface from "./TypingInterface";
-import MultiplayerInterface from "./MultiplayerInterface"
+import MultiplayerDashboard from "./MultiplayerInput";
 import Footer from "./Footer";
 import context from "../context/context";
 import ShowPlayers from "./ShowPlayers";
 
 const Home = () => {
-  const { room, players, isMultiplayer, rankedPlayers } = useContext(context);
+  const { room, players, isMultiplayer } = useContext(context);
   const [showMultiFunc, setShowMultiFunc] = useState(false);
 
   useEffect(() => {
@@ -15,36 +15,47 @@ const Home = () => {
   }, [isMultiplayer]);
 
   return (
-    <div className="bg-[#eeeded] flex flex-col items-center w-full gap-4 min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-gray-900 to-gray-800">
       <Navbar />
-      <div className={`flex flex-col items-center w-full gap-4 flex-grow`}>
-        {/* 1. Multiplayer Dashboard */}
-        <div
-          className={`transition-all duration-500 ease-in-out ${
-            showMultiFunc
-              ? "translate-y-0 opacity-100"
-              : "translate-y-[-100%] opacity-0"
-          }`}
-        >
-          <MultiplayerInterface />
-        </div>
-
-        {/* 2. Typing Interface */}
-        <div className="block">
-          <TypingInterface />
-        </div>
-
-        {/* 3. Show Players (Only in multiplayer mode when in a room) */}
-        {isMultiplayer && room && players.length > 0 && (
-          <div className="w-full max-w-[60vw]">
-            <ShowPlayers players={players} />
-          </div>
-        )}
-      </div>
       
-      <div className="relative bottom-0 w-full">
-        <Footer />
-      </div>
+      <main className="container mx-auto px-4 py-8">
+        <div className="flex flex-col items-center gap-8">
+          {/* Multiplayer Dashboard */}
+          <div
+            className={`w-full transition-all duration-500 ease-in-out transform ${
+              showMultiFunc
+                ? "translate-y-0 opacity-100"
+                : "-translate-y-full opacity-0 pointer-events-none"
+            }`}
+          >
+            <div className="bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-700">
+              <MultiplayerDashboard />
+            </div>
+          </div>
+
+          {/* Typing Interface */}
+          <div className="w-full">
+            <TypingInterface />
+          </div>
+
+          {/* Show Players (Only in multiplayer mode) */}
+          <div
+            className={`w-full transition-all duration-500 ease-in-out transform ${
+              showMultiFunc
+                ? " opacity-100"
+                : " opacity-0 pointer-events-none"
+            }`}
+          >
+            <div className="bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-700">
+              <div className="h-[200px] overflow-y-auto">
+                {room && <ShowPlayers players={players} />}
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <Footer />
     </div>
   );
 };

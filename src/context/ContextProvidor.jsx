@@ -14,20 +14,21 @@ const ContextProvidor = ({ children }) => {
   const maxTime = 60;
   const [mistakes, setMistakes] = useState(0);
   const [WPM, setWPM] = useState(0);
+  const [CPM, setCPM] = useState(0);
   const [timeLeft, setTimeLeft] = useState(maxTime);
-  const [isTyping, setIsTyping] = useState(false);
   const [text1, setText1] = useState("");
   const [text2, setText2] = useState("");
   const [text3, setText3] = useState("");
   const [currentText, setCurrentText] = useState("");
   const [room, setRoom] = useState("");
-  const [rankedPlayers,setRankedPlayers] = useState([]);
   const [isLogedIn, setIsLogedIn] = useState(false);
   const [isMultiplayer, setIsMultiplayer] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+  const [gameEnded, setGameEnded] = useState(false);
   const [isMobile,setIsMobile] = useState(false);
   const [isPC,setIsPC] = useState(false);
   const [players, setPlayers] = useState([]);  
+  const [userName, setUserName] = useState("");  
   return (
     <UserContext.Provider
       value={{
@@ -37,34 +38,36 @@ const ContextProvidor = ({ children }) => {
         text2,
         text3,
         WPM,
+        CPM,
         mistakes,
         timeLeft,
-        isTyping,
         currentText,
         isLogedIn,
         isMultiplayer,
         gameStarted,
+        gameEnded,
         room,
-        rankedPlayers,
         isMobile,
         isPC,
         players,
+        userName,
         setText1,
         setText2,
         setText3,
         setWPM,
-        setIsTyping,
+        setCPM,
         setMistakes,
         setTimeLeft,
         setCurrentText,
         setIsLogedIn,
         setIsMultiplayer,
         setGameStarted,
+        setGameEnded,
         setRoom,
-        setRankedPlayers,
         setIsMobile,
         setIsPC,
         setPlayers,
+        setUserName,
       }}
     >
       {children}
