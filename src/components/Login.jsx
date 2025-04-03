@@ -8,7 +8,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { setIsLogedIn, setUserName, isLogedIn } = useContext(context);
+  const { setIsLogedIn, setUserName } = useContext(context);
 
   useEffect(() => {
     const fetchLoginInfo = async () => {
@@ -23,7 +23,7 @@ const Login = () => {
         );
 
         const success = response.data.success;
-        if (success && !isLogedIn) {
+        if (success) {
           toast.success(response.data.message);
           setIsLogedIn(true);
           setUserName(response.data.user.name);
@@ -35,7 +35,7 @@ const Login = () => {
       }
     }
     fetchLoginInfo();
-  }, [isLogedIn])
+  }, [])
 
   const handleLogin = async (e) => {
     e.preventDefault();
