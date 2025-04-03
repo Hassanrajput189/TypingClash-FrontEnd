@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import TypingInterface from "./TypingInterface";
-import MultiplayerDashboard from "./MultiplayerInput";
+import MultiplayerInput from "./MultiplayerInput";
 import Footer from "./Footer";
 import context from "../context/context";
 import ShowPlayers from "./ShowPlayers";
@@ -29,7 +29,7 @@ const Home = () => {
             }`}
           >
             <div className="bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-700">
-              <MultiplayerDashboard />
+              <MultiplayerInput />
             </div>
           </div>
 
