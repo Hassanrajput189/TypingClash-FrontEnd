@@ -1,4 +1,4 @@
-import { StrictMode, useContext } from "react";
+import { StrictMode, useContext,useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.jsx";
@@ -8,9 +8,28 @@ import Register from "./components/Register.jsx";
 import { Toaster } from "react-hot-toast";
 import ContextProvider from "./context/ContextProvidor.jsx"
 import context from "./context/context.js";
+import axios from "axios";
+import { API_URL } from "./config.js";
 const Routes = () => {
+const { isLogedIn,setIsLogedIn,setUserName } = useContext(context);
+  const checkLoginStatus = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/api/users/me`, {
+          withCredentials: true,
+        });
+        const success = response.data.success;
+        if (success) {
+          setIsLogedIn(true);
+          setUserName(response.data.user.name); // get user name from login response
+        }
+      } catch (error) {
+        setIsLogedIn(false);
+      }
+    };
+    useEffect(() => {
+      checkLoginStatus();
+    }, []);
   
-  const { isLogedIn } = useContext(context);
   const router = createBrowserRouter([
     {
       path: "/register", 
@@ -23,7 +42,6 @@ const Routes = () => {
     {
       path: "/", 
       element: isLogedIn ? <App /> : <Navigate to="/login" replace />,
-      
     },
   ]);
   return (

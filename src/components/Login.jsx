@@ -3,70 +3,52 @@ import context from "../context/context";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { API_URL } from "../config";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { setIsLogedIn, setUserName } = useContext(context);
-
-  useEffect(() => {
-    const fetchLoginInfo = async () => {
-      try {
-        const response = await axios.get(`http://localhost:5000/api/users/loginInfo`,
-          {
-            headers: {
-              "Content-Type": "application/json"
-            },
-            withCredentials: true
-          }
-        );
-
-        const success = response.data.success;
-        if (success) {
-          toast.success(response.data.message);
-          setIsLogedIn(true);
-          setUserName(response.data.user.name);
-          navigate("/");
-        }
-      } catch (error) {
-        setIsLogedIn(false);
-        navigate("/login");
-      }
-    }
-    fetchLoginInfo();
-  }, [])
+  const { setIsLogedIn, setUserName,isLogedIn } = useContext(context);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:5000/api/users/login`,
-        {
-          email,
-          password,
-        },
+      // POST request to login endpoint
+      const response = await axios.post(
+        `${API_URL}/api/users/login`,
+        { email, password },
         {
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
-          withCredentials: true
+          withCredentials: true,
         }
       );
-      toast.success(response.data.message);
-      setIsLogedIn(true);
-      setUserName(response.data.user.name);
-      navigate("/");
-    } catch (error) {
-      if (error.response) {
-        toast.error(error.response.data.message || "Unknown error");
-      } else if (error.request) {
-        toast.error("No response from server. Please try again.");
-      } else {
-        toast.error("An error occurred. Please try again.");
+
+      const success = response.data.success;
+      if (success) {
+        toast.success(response.data.message);
+        setIsLogedIn(true);
+        setUserName(response.data.user.name); // get user name from login response
+        navigate("/"); // Redirect to home if logged in
       }
+    } catch (error) {
+      setIsLogedIn(false);
+      navigate("/login"); // Redirect to login if login fails
+      toast.error(
+        error.response?.data?.message || "Login failed. Please try again."
+      );
     }
   };
-
+  useEffect(()=>{
+        if (isLogedIn) {
+          navigate("/"); // Redirect to home if already logged in
+        }
+        else{
+          navigate("/login");
+        }
+      },[isLogedIn]);
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex flex-col justify-center items-center p-4">
       <div className="w-full max-w-md">
@@ -83,10 +65,13 @@ const Login = () => {
           <h2 className="text-2xl font-bold text-gray-200 mb-6 text-center">
             Welcome Back
           </h2>
-          
+
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-300 mb-1"
+              >
                 Email
               </label>
               <input
@@ -101,7 +86,10 @@ const Login = () => {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-1">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-300 mb-1"
+              >
                 Password
               </label>
               <input
@@ -126,7 +114,10 @@ const Login = () => {
           <div className="mt-6 text-center">
             <p className="text-gray-400">
               Don't have an account?{" "}
-              <Link to="/register" className="text-indigo-400 hover:text-indigo-300 font-medium">
+              <Link
+                to="/register"
+                className="text-indigo-400 hover:text-indigo-300 font-medium"
+              >
                 Sign up
               </Link>
             </p>

@@ -1,73 +1,152 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import io from "socket.io-client";
 import UserContext from "./context";
+import { API_URL } from "../config";
+import toast from "react-hot-toast";
+
 const ContextProvidor = ({ children }) => {
-  
-  
   const socket = useMemo(() => {
-    return io("http://localhost:5000", { 
-      transports: ['websocket', 'polling'],
+    return io(API_URL, {
+      transports: ["websocket", "polling"],
       withCredentials: true,
     });
-  }, []); 
-  
+  }, []);
+
   const maxTime = 60;
+  const [socketID, setSocketID] = useState(socket.id);
   const [mistakes, setMistakes] = useState(0);
   const [WPM, setWPM] = useState(0);
-  const [CPM, setCPM] = useState(0);
   const [timeLeft, setTimeLeft] = useState(maxTime);
-  const [text1, setText1] = useState("");
-  const [text2, setText2] = useState("");
-  const [text3, setText3] = useState("");
+  const [textEasy, setTextEasy] = useState("");
+  const [textMedium, setTextMedium] = useState("");
+  const [textHard, setTextHard] = useState("");
   const [currentText, setCurrentText] = useState("");
+  const [progress, setProgress] = useState(0);
   const [room, setRoom] = useState("");
+  const [roomHistory, setRoomHistory] = useState([]);
+  const [leftRoom,setLeftRoom] = useState(false);
   const [isLogedIn, setIsLogedIn] = useState(false);
   const [isMultiplayer, setIsMultiplayer] = useState(false);
-  const [gameStarted, setGameStarted] = useState(false);
-  const [gameEnded, setGameEnded] = useState(false);
-  const [isMobile,setIsMobile] = useState(false);
-  const [isPC,setIsPC] = useState(false);
-  const [players, setPlayers] = useState([]);  
-  const [userName, setUserName] = useState("");  
+  const [showMultiInput, setShowMultiInput] = useState(false);
+  const [showMultiRooms, setShowMultiRooms] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const [players, setPlayers] = useState([]);
+  const [userName, setUserName] = useState("");
+  const [width, setWidth] = useState(window.innerWidth);
+
+
+  
+  // Handle socket connect
+  useEffect(() => {
+    if (!socket) return;
+    const handleConnect = () => setSocketID(socket.id);
+    socket.on("connect", handleConnect);
+    return () => socket.off("connect", handleConnect);
+  }, [socket]);
+
+  // Handle playerList
+  useEffect(() => {
+    if (!socket) return;
+    const handlePlayerList = (playerList) => {
+      if (playerList.length <= 4) {
+        setPlayers(playerList);
+      } else {
+        toast.error("The room is full! Please try joining another room.");
+      }
+      // Reset players if left room
+      if (leftRoom) {
+        setPlayers([]);
+        setLeftRoom(false);
+      }
+    };
+    socket.on("playerList", handlePlayerList);
+    return () => socket.off("playerList", handlePlayerList);
+  }, [socket, leftRoom]);
+
+  // Handle roomList
+  useEffect(() => {
+    if (!socket) return;
+    socket.emit("getRooms");
+    const handleRoomList = (rooms) => setRoomHistory(rooms);
+    socket.on("roomList", handleRoomList);
+    return () => socket.off("roomList", handleRoomList);
+  }, [socket,leftRoom,room]);
+
+  // Handle playerStats
+  useEffect(() => {
+    if (!socket) return;
+    const handlePlayerStats = (stats) => {
+      setPlayers((prevPlayers) =>
+        prevPlayers.map((player) =>
+          player.id === stats.id ? { ...player, ...stats } : player
+        )
+      );
+    };
+    socket.on("playerStats", handlePlayerStats);
+    return () => socket.off("playerStats", handlePlayerStats);
+  }, [socket]);
+
+  // Handle message
+  useEffect(() => {
+    if (!socket) return;
+    const handleMessage = (message) => toast.success(message);
+    socket.on("message", handleMessage);
+    return () => socket.off("message", handleMessage);
+  }, [socket]);
+
+  // Handle gameStart
+  useEffect(() => {
+    if (!socket) return;
+    const handleGameStart = () => setIsTyping(true);
+    socket.on("gameStart", handleGameStart);
+    return () => socket.off("gameStart", handleGameStart);
+  }, [socket]);
+
   return (
     <UserContext.Provider
       value={{
         socket,
+        socketID,
         maxTime,
-        text1,
-        text2,
-        text3,
+        textEasy,
+        textMedium,
+        textHard,
         WPM,
-        CPM,
         mistakes,
         timeLeft,
+        progress,
         currentText,
         isLogedIn,
         isMultiplayer,
-        gameStarted,
-        gameEnded,
+        showMultiInput,
+        showMultiRooms,
+        isTyping,
         room,
-        isMobile,
-        isPC,
+        roomHistory,
+        leftRoom,
         players,
         userName,
-        setText1,
-        setText2,
-        setText3,
+        width,
+        setSocketID,
+        setTextEasy,
+        setTextMedium,
+        setTextHard,
         setWPM,
-        setCPM,
         setMistakes,
         setTimeLeft,
         setCurrentText,
+        setProgress,
         setIsLogedIn,
         setIsMultiplayer,
-        setGameStarted,
-        setGameEnded,
+        setShowMultiInput,
+        setShowMultiRooms,
+        setIsTyping,
         setRoom,
-        setIsMobile,
-        setIsPC,
+        setRoomHistory,
+        setLeftRoom,
         setPlayers,
         setUserName,
+        setWidth,
       }}
     >
       {children}
