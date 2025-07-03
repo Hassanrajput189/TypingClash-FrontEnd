@@ -16,12 +16,13 @@ const ContextProvidor = ({ children }) => {
   const [socketID, setSocketID] = useState(socket.id);
   const [mistakes, setMistakes] = useState(0);
   const [WPM, setWPM] = useState(0);
+  const [percentage, setPercentage] = useState(0);
   const [timeLeft, setTimeLeft] = useState(maxTime);
   const [textEasy, setTextEasy] = useState("");
   const [textMedium, setTextMedium] = useState("");
+  const [charIndex, setCharIndex] = useState(0);
   const [textHard, setTextHard] = useState("");
   const [currentText, setCurrentText] = useState("");
-  const [progress, setProgress] = useState(0);
   const [room, setRoom] = useState("");
   const [roomHistory, setRoomHistory] = useState([]);
   const [leftRoom,setLeftRoom] = useState(false);
@@ -113,8 +114,9 @@ const ContextProvidor = ({ children }) => {
         textHard,
         WPM,
         mistakes,
+        percentage,
+        charIndex,
         timeLeft,
-        progress,
         currentText,
         isLogedIn,
         isMultiplayer,
@@ -133,9 +135,10 @@ const ContextProvidor = ({ children }) => {
         setTextHard,
         setWPM,
         setMistakes,
+        setPercentage,
+        setCharIndex,
         setTimeLeft,
         setCurrentText,
-        setProgress,
         setIsLogedIn,
         setIsMultiplayer,
         setShowMultiInput,

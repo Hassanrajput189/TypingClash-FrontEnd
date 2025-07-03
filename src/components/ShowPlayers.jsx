@@ -1,4 +1,3 @@
-import Progress from "./Progress";
 import { useContext } from "react";
 import context from "../context/context";
 
@@ -27,9 +26,8 @@ const ShowPlayers = ({ players }) => {
 
                 
                   <div className=" flex justify-center items-center">
-                    <Progress
-                      progress={player.progress ? player.progress : 0}
-                    />
+                    
+                    {player.percentage}
                   </div>
                 
                 <span className="text-sm text-gray-400">ID: {player.id}</span>

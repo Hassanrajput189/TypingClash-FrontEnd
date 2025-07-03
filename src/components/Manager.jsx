@@ -6,6 +6,7 @@ import Footer from "./Footer";
 import context from "../context/context";
 import ShowPlayers from "./ShowPlayers";
 import ShowRooms from "./ShowRooms";
+import ShowStats from "./ShowStats";
 
 
 const Manager = () => {
@@ -17,14 +18,16 @@ const Manager = () => {
     showMultiRooms,
     setShowMultiRooms,
     width,
+    charIndex,
+    currentText,
   } = useContext(context);
 
   return (
-    <div className="flex flex-col min-h-screen ">
+    <div className="flex flex-col min-h-screen">
       {/* Navbar Component */}
       <Navbar />
         
-      <main className="flex flex-col justify-center  items-center px-4 py-8 w-full gap-8">
+      <main className="flex flex-col justify-start  items-center px-4 py-8 w-full h-full gap-8">
         
         <div className="w-full flex flex-col lg:flex-row gap-6 justify-center  lg:w-full  md:w-[90%] ">
           
@@ -53,11 +56,18 @@ const Manager = () => {
               </div>
             </div>
           )}
+          <div className="flex flex-col gap-10 items-center w-full  lg:w-[65%] justify-center">
           {/* Typing Interface */}
-          <div className="w-full  lg:w-[65%] flex justify-center">
+          <div >
             <TypingInterface />
           </div>
-
+          {/* Show Stats*/}
+          {!isMultiplayer && charIndex + 1 === currentText.length &&(
+            <div className="w-full">
+            <ShowStats />
+          </div>
+          )}
+          </div>
           {/* Show Rooms (Only in multiplayer mode) */}
           {showMultiRooms && width < 1024 && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
@@ -84,7 +94,7 @@ const Manager = () => {
         </div>
         {/* Show Players (Only in multiplayer mode) */}
         <div
-          className={`w-full transition-all duration-500 ease-in-out transform ${
+          className={`w-full h-full flex flex-col justify-end  ${
             isMultiplayer ? "block" : "hidden"
           }`}
         >
