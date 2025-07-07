@@ -7,6 +7,7 @@ import context from "../context/context";
 import ShowPlayers from "./ShowPlayers";
 import ShowRooms from "./ShowRooms";
 import ShowStats from "./ShowStats";
+import Leaderboard from "./Leaderboard";
 
 
 const Manager = () => {
@@ -27,9 +28,9 @@ const Manager = () => {
       {/* Navbar Component */}
       <Navbar />
         
-      <main className="flex flex-col justify-start  items-center px-4 py-8 w-full h-full gap-8">
+      <main className="flex flex-col justify-start items-center px-4 py-8 w-full flex-1 gap-8">
         
-        <div className="w-full flex flex-col lg:flex-row gap-6 justify-center  lg:w-full  md:w-[90%] ">
+        <div className="w-full flex flex-col lg:flex-row gap-6 justify-center lg:w-full md:w-[90%]">
           
           {/* Multiplayer Component */}
           {showMultiInput && width < 1024 && (
@@ -56,17 +57,19 @@ const Manager = () => {
               </div>
             </div>
           )}
-          <div className="flex flex-col gap-10 items-center w-full  lg:w-[65%] justify-center">
-          {/* Typing Interface */}
-          <div >
-            <TypingInterface />
-          </div>
-          {/* Show Stats*/}
-          {!isMultiplayer && charIndex + 1 === currentText.length &&(
-            <div className="w-full">
-            <ShowStats />
-          </div>
-          )}
+          <div className="flex flex-col gap-10 items-center w-full lg:w-[65%] justify-center">
+            {/* Typing Interface */}
+            <div>
+              <TypingInterface />
+            </div>
+            {/* Show Stats*/}
+            {!isMultiplayer && charIndex === currentText.length && (
+              <div className="w-full">
+                <ShowStats />
+              </div>
+            )}
+            
+            
           </div>
           {/* Show Rooms (Only in multiplayer mode) */}
           {showMultiRooms && width < 1024 && (
@@ -94,16 +97,19 @@ const Manager = () => {
         </div>
         {/* Show Players (Only in multiplayer mode) */}
         <div
-          className={`w-full h-full flex flex-col justify-end  ${
+          className={`w-full flex flex-col justify-end ${
             isMultiplayer ? "block" : "hidden"
           }`}
         >
-          <div className=" bg-gray-800  rounded-xl shadow-lg p-5 border border-gray-700 overflow-y-auto">
+          <div className="bg-gray-800 rounded-xl shadow-lg p-5 border border-gray-700 max-h-[400px] overflow-y-auto">
             <ShowPlayers players={players} />
           </div>
         </div>
+        <div className="w-full max-h-[400px] overflow-y-auto md:w-[65%]">
+                <Leaderboard />
+        </div>
       </main>
-
+      {/* Footer - now properly positioned at bottom */}
       <Footer />
     </div>
   );

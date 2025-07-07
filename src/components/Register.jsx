@@ -3,12 +3,16 @@ import { Link, useNavigate} from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast"
 import { API_URL } from "../config";
+import { useContext } from "react";
+import context from "../context/context";
 
 
 const Register = () => {
   const [name,setName] = useState("");
   const [email,setEmail] = useState("");
   const [password,setPassword] = useState("");
+  const {setDBID}= useContext(context)
+  
   const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
@@ -27,8 +31,12 @@ const Register = () => {
           withCredentials: true
         }
       );
-      toast.success(response.data.message);
-      navigate("/login");
+      const data = response.data;
+      if(data.success){
+        toast.success(data.message);
+        setDBID(data.user._id)
+        navigate("/login");
+      }
     } catch (error) {
       if (error.response) {
         toast.error(error.response.data.message || "Unknown error");

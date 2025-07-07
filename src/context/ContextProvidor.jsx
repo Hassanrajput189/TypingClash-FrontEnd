@@ -14,9 +14,10 @@ const ContextProvidor = ({ children }) => {
 
   const maxTime = 60;
   const [socketID, setSocketID] = useState(socket.id);
+  const [dbID,setDBID] = useState("");
   const [mistakes, setMistakes] = useState(0);
   const [WPM, setWPM] = useState(0);
-  const [percentage, setPercentage] = useState(0);
+  const [accuracy, setAccuracy] = useState(0);
   const [timeLeft, setTimeLeft] = useState(maxTime);
   const [textEasy, setTextEasy] = useState("");
   const [textMedium, setTextMedium] = useState("");
@@ -82,9 +83,25 @@ const ContextProvidor = ({ children }) => {
           player.id === stats.id ? { ...player, ...stats } : player
         )
       );
+      // Trigger leaderboard refresh when stats are received
+      window.dispatchEvent(new CustomEvent('leaderboardRefresh'));
     };
     socket.on("playerStats", handlePlayerStats);
     return () => socket.off("playerStats", handlePlayerStats);
+  }, [socket]);
+
+  // Handle playerProgress
+  useEffect(() => {
+    if (!socket) return;
+    const handlePlayerProgress = (progress) => {
+      setPlayers((prevPlayers) =>
+        prevPlayers.map((player) =>
+          player.id === progress.id ? { ...player, charIndex: progress.charIndex } : player
+        )
+      );
+    };
+    socket.on("playerProgress", handlePlayerProgress);
+    return () => socket.off("playerProgress", handlePlayerProgress);
   }, [socket]);
 
   // Handle message
@@ -108,13 +125,14 @@ const ContextProvidor = ({ children }) => {
       value={{
         socket,
         socketID,
+        dbID,
         maxTime,
         textEasy,
         textMedium,
         textHard,
         WPM,
         mistakes,
-        percentage,
+        accuracy,
         charIndex,
         timeLeft,
         currentText,
@@ -130,12 +148,13 @@ const ContextProvidor = ({ children }) => {
         userName,
         width,
         setSocketID,
+        setDBID,
         setTextEasy,
         setTextMedium,
         setTextHard,
         setWPM,
         setMistakes,
-        setPercentage,
+        setAccuracy,
         setCharIndex,
         setTimeLeft,
         setCurrentText,

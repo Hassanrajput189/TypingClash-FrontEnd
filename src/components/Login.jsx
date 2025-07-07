@@ -9,7 +9,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { setIsLogedIn, setUserName,isLogedIn } = useContext(context);
+  const { setIsLogedIn, setUserName,isLogedIn,setDBID } = useContext(context);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -26,11 +26,12 @@ const Login = () => {
         }
       );
 
-      const success = response.data.success;
-      if (success) {
-        toast.success(response.data.message);
+      const data = response.data;
+      if (data.success) {
+        setDBID(data.user._id);
+        setUserName(data.user.name); // get user name from login response
         setIsLogedIn(true);
-        setUserName(response.data.user.name); // get user name from login response
+        toast.success(data.message);
         navigate("/"); // Redirect to home if logged in
       }
     } catch (error) {

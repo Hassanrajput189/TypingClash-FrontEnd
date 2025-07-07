@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import context from "../context/context";
 const ShowStats = () => {
-  const { WPM, mistakes, percentage } = useContext(context);
+  const { WPM, mistakes, accuracy } = useContext(context);
   return (
      <div className="relative px-8 py-6 w-full">
           <div className="absolute inset-0 bg-gradient-to-r from-gray-800/90 to-gray-800/70 border-t border-gray-700/50 rounded-3xl"></div>
@@ -10,10 +10,10 @@ const ShowStats = () => {
               <div className="absolute -inset-1 bg-indigo-500/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <div className="relative bg-gray-800/50 rounded-xl p-4 border border-gray-700/50 text-center">
                 <div className="text-sm text-indigo-400 font-medium mb-1">
-                  Completed
+                  Accuracy
                 </div>
                 <div className="text-3xl font-bold text-indigo-300">
-                  {percentage}
+                  {accuracy}
                   <span className="text-[20px]">%</span>
                 </div>
               </div>

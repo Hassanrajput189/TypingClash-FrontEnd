@@ -14,6 +14,7 @@ const TypingInterface = () => {
 
   const {
     socket,
+    dbID,
     room,
     currentText,
     players,
@@ -25,7 +26,7 @@ const TypingInterface = () => {
     setCharIndex,
     setWPM,
     setMistakes,
-    setPercentage,
+    setAccuracy,
   } = useContext(context);
   useEffect(() => {
     if (currentText && isMultiplayer !== undefined) {
@@ -82,11 +83,13 @@ const TypingInterface = () => {
         }
       );
       if (response.data.success) {
-        const { wpm, mistakes, percentage } = response.data;
+        const { wpm, mistakes, accuracy } = response.data;
         setWPM(wpm);
         setMistakes(mistakes);
-        setPercentage(percentage);
-        toast.success("Stats calculated successfully!");
+        setAccuracy(accuracy);
+        
+        // Trigger leaderboard refresh
+        window.dispatchEvent(new CustomEvent('leaderboardRefresh'));
       }
     } catch (error) {
       
@@ -103,16 +106,6 @@ const TypingInterface = () => {
   const handleChange = (e) => {
     if (isTyping) {
       const newCorrectWrong = [...correctWrong];
-      if (charIndex + 1 === currentText.length) {
-        toast.success("Text completed!");
-        setIsTyping(false);
-        if (isMultiplayer) {
-          socket.emit("calStats", newCorrectWrong);
-        } else {
-          handleStats(e, newCorrectWrong);
-        }
-        return;
-      }
       const inputChar = e.target.value;
       const inputLength = inputChar.length;
 
@@ -128,7 +121,24 @@ const TypingInterface = () => {
           newCorrectWrong[charIndex] = "wrong";
         }
         setCorrectWrong(newCorrectWrong);
-        setCharIndex((prevIndex) => prevIndex + 1);
+        const newCharIndex = charIndex + 1;
+        setCharIndex(newCharIndex);
+        
+        // Emit progress update in multiplayer mode
+        if (isMultiplayer) {
+          socket.emit("updateProgress", newCharIndex);
+        }
+
+        // Check if text is completed (after updating charIndex)
+        if (newCharIndex === currentText.length) {
+          toast.success("Text completed!");
+          setIsTyping(false);
+          if (isMultiplayer) {
+            socket.emit("calStats", dbID, newCorrectWrong);
+          } else {
+            handleStats(e, newCorrectWrong);
+          }
+        }
       }
 
       e.target.value = "";
@@ -191,6 +201,7 @@ const TypingInterface = () => {
                     onClick={() => {
                       socket.emit("leaveRoom", room);
                       setLeftRoom(true);
+                      setIsTyping(false);
                     }}
                   >
                     Leave Room
